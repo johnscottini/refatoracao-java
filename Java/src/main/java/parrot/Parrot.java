@@ -16,13 +16,28 @@ public class Parrot {
 
     public double getSpeed() {
         return switch (type) {
-            case EUROPEAN -> getBaseSpeed();
-            case AFRICAN -> Math.max(0, getBaseSpeed() - getLoadFactor() * numberOfCoconuts);
-            case NORWEGIAN_BLUE -> (isNailed) ? 0 : getBaseSpeed(voltage);
+            case EUROPEAN -> calculateEuropeanSpeed();
+            case AFRICAN -> calculateAfricanSpeed();
+            case NORWEGIAN_BLUE -> calculateNorwegianBlueSpeed();
         };
     }
 
-    private double getBaseSpeed(double voltage) {
+    private double calculateEuropeanSpeed() {
+        return getBaseSpeed();
+    }
+
+    private double calculateAfricanSpeed() {
+        return Math.max(0, getBaseSpeed() - getLoadFactor() * numberOfCoconuts);
+    }
+
+    private double calculateNorwegianBlueSpeed() {
+        if (isNailed) {
+            return 0;
+        }
+        return calculateSpeedBasedOnVoltage();
+    }
+
+    private double calculateSpeedBasedOnVoltage() {
         return Math.min(24.0, voltage * getBaseSpeed());
     }
 
@@ -36,9 +51,21 @@ public class Parrot {
 
     public String getCry() {
         return switch (type) {
-            case EUROPEAN -> "Sqoork!";
-            case AFRICAN -> "Sqaark!";
-            case NORWEGIAN_BLUE -> voltage > 0 ? "Bzzzzzz" : "...";
+            case EUROPEAN -> europeanCry();
+            case AFRICAN -> africanCry();
+            case NORWEGIAN_BLUE -> norwegianBlueCry();
         };
+    }
+
+    private String europeanCry() {
+        return "Sqoork!";
+    }
+
+    private String africanCry() {
+        return "Sqaark!";
+    }
+
+    private String norwegianBlueCry() {
+        return voltage > 0 ? "Bzzzzzz" : "...";
     }
 }
