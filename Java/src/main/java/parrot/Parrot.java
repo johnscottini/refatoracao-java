@@ -7,6 +7,10 @@ public class Parrot {
     private final double voltage;
     private final boolean isNailed;
 
+    private static final double BASE_SPEED = 12.0;
+    private static final double LOAD_FACTOR = 9.0;
+    private static final double MAX_SPEED = 24.0;
+
     public Parrot(ParrotTypeEnum type, int numberOfCoconuts, double voltage, boolean isNailed) {
         this.type = type;
         this.numberOfCoconuts = numberOfCoconuts;
@@ -23,11 +27,13 @@ public class Parrot {
     }
 
     private double calculateEuropeanSpeed() {
-        return getBaseSpeed();
+        return BASE_SPEED;
     }
 
     private double calculateAfricanSpeed() {
-        return Math.max(0, getBaseSpeed() - getLoadFactor() * numberOfCoconuts);
+        double load = LOAD_FACTOR * numberOfCoconuts;
+        double adjustedSpeed = BASE_SPEED - load;
+        return Math.max(0, adjustedSpeed);
     }
 
     private double calculateNorwegianBlueSpeed() {
@@ -38,15 +44,9 @@ public class Parrot {
     }
 
     private double calculateSpeedBasedOnVoltage() {
-        return Math.min(24.0, voltage * getBaseSpeed());
-    }
-
-    private double getLoadFactor() {
-        return 9.0;
-    }
-
-    private double getBaseSpeed() {
-        return 12.0;
+        double potentialSpeed = voltage * BASE_SPEED;
+        double limitedSpeed = Math.min(MAX_SPEED, potentialSpeed);
+        return limitedSpeed;
     }
 
     public String getCry() {
@@ -66,6 +66,7 @@ public class Parrot {
     }
 
     private String norwegianBlueCry() {
-        return voltage > 0 ? "Bzzzzzz" : "...";
+        boolean isPowered = voltage > 0;
+        return isPowered ? "Bzzzzzz" : "...";
     }
 }
